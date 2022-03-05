@@ -1,7 +1,7 @@
 ## Simplicity is beauty
 
 **Solid** is a messaging app with a focus on speed and security. It’s superfast, simple and free.
-This repo contains the official forked and reworked source code for [Telegram App for Android](https://play.google.com/store/apps/details?id=org.telegram.messenger).
+This repo contains the forked source code for [Telegram App for Android](https://play.google.com/store/apps/details?id=org.telegram.messenger).
 
 ### API, Protocol documentation
 
