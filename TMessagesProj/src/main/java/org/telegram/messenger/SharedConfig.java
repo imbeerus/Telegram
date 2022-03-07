@@ -66,7 +66,7 @@ public class SharedConfig {
     public static String lastUpdateVersion;
     public static int suggestStickers;
     public static boolean loopStickers;
-    public static int keepMedia = 2;
+    public static int keepMedia = 3;
     public static int lastKeepMediaCheckTime;
     public static int lastLogsCheckTime;
     public static int searchMessagesAsListHintShows;
@@ -362,7 +362,7 @@ public class SharedConfig {
             distanceSystemType = preferences.getInt("distanceSystemType", 0);
             devicePerformanceClass = preferences.getInt("devicePerformanceClass", -1);
             loopStickers = preferences.getBoolean("loopStickers", true);
-            keepMedia = preferences.getInt("keep_media", 2);
+            keepMedia = preferences.getInt("keep_media", 3);
             noStatusBar = preferences.getBoolean("noStatusBar", false);
             lastKeepMediaCheckTime = preferences.getInt("lastKeepMediaCheckTime", 0);
             lastLogsCheckTime = preferences.getInt("lastLogsCheckTime", 0);
