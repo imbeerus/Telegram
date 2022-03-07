@@ -267,12 +267,19 @@ android {
         }
     }
 
+    aaptOptions {
+        noCompress ""
+        additionalParameters "--no-version-vectors"
+    }
+
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 30
         versionName "8.5.4"
 
-        vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
+        // Stops the Gradle plugin’s automatic rasterization of vectors
+        vectorDrawables.useSupportLibrary = true
+        generatedDensities = []
 
         externalNativeBuild {
             cmake {
