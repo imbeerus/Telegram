@@ -97,6 +97,6 @@
 -dontwarn org.checkerframework.**
 -dontwarn javax.annotation.**
 
-# Use -keep to explicitly keep any other classes shrinking would remove
--dontoptimize
--dontobfuscate
+## Use -keep to explicitly keep any other classes shrinking would remove
+#-dontoptimize
+#-dontobfuscate

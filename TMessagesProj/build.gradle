@@ -164,7 +164,7 @@ android {
             applicationIdSuffix ".web"
             minifyEnabled true
             multiDexEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),  getDefaultProguardFile("proguard-android-optimize.txt"),'proguard-rules.pro'
             ndk.debugSymbolLevel = 'FULL'
         }
 
@@ -175,7 +175,7 @@ android {
             minifyEnabled true
             shrinkResources false
             multiDexEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), getDefaultProguardFile("proguard-android-optimize.txt"), 'proguard-rules.pro'
             ndk.debugSymbolLevel = 'FULL'
         }
     }
