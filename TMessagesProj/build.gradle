@@ -120,12 +120,15 @@ android {
         release {
             debuggable false
             jniDebuggable false
+            renderscriptDebuggable false
+            pseudoLocalesEnabled false
+            zipAlignEnabled true
             signingConfig signingConfigs.release
             minifyEnabled true
             shrinkResources false
             multiDexEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), getDefaultProguardFile("proguard-android-optimize.txt"), 'proguard-rules.pro'
-            ndk.debugSymbolLevel = 'FULL'
+            ndk.debugSymbolLevel = 'NONE'
         }
     }
 
