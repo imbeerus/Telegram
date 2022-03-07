@@ -268,7 +268,6 @@ android {
     }
 
     aaptOptions {
-        noCompress ""
         additionalParameters "--no-version-vectors"
     }
 
@@ -281,12 +280,26 @@ android {
         vectorDrawables.useSupportLibrary = true
         generatedDensities = []
 
+        resConfigs "en", "ru", "ldltr", "notround", "port"
+
         externalNativeBuild {
             cmake {
                 version '3.10.2'
                 arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-16', "-j=16"
             }
         }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/*.kotlin_module'
     }
 }
 
