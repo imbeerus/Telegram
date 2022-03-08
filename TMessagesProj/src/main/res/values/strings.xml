@@ -1792,7 +1792,6 @@
     <string name="ResetNotificationsAlertTitle">Reset all notifications</string>
     <string name="ResetNotificationsAlert">Are you sure you want to reset all notification settings to default?</string>
     <string name="TextSizeHeader">Message text size</string>
-    <string name="AskAQuestion">Ask a Question</string>
     <string name="AddAnExplanation">Add an explanation</string>
     <string name="AddAnExplanationInfo">Users will see this text after choosing the wrong answer, good for educational purposes.</string>
     <string name="EnableAnimations">Enable Animations</string>
@@ -1934,19 +1933,13 @@
     <string name="LanguageUnsupportedError">There is no such language.</string>
     <string name="LanguageSame">You are already using this language pack (**%1$s**). You can change your language at any time in Settings.</string>
     <string name="LanguageUnknownCustomAlert">Unfortunately, this custom language pack (**%1$s**) doesn\'t contain data for Telegram Android.</string>
-    <string name="AskAQuestionInfo">Please note that Telegram Support is done by volunteers. We try to respond as quickly as possible, but it may take a while.\n\nPlease take a look at the <![CDATA[<a href=\"https://telegram.org/faq#general-questions\">Telegram FAQ</a>]]>: it has answers to most questions and important tips for <![CDATA[<a href=\"https://telegram.org/faq#troubleshooting\">troubleshooting</a>]]>.</string>
-    <string name="AskButton">Ask a volunteer</string>
-    <string name="TelegramFAQ">Telegram FAQ</string>
-    <string name="TelegramFaq">Telegram FAQ</string>
     <string name="TelegramFeatures">Telegram Features</string>
     <string name="TelegramFeaturesUrl">https://t.me/TelegramTips</string>
     <string name="AddAccount">Add Account</string>
     <string name="SelectAccount">Select Account</string>
     <string name="TelegramFaqUrl">https://telegram.org/faq</string>
-    <string name="PrivacyPolicy">Privacy Policy</string>
     <string name="TermsOfService">Terms of Service</string>
     <string name="TermsOfServiceLogin">By signing up,\nyou agree to the *Terms of Service*.</string>
-    <string name="PrivacyPolicyUrl">https://telegram.org/privacy</string>
     <string name="DeleteLocalizationTitle">Delete language pack</string>
     <string name="DeleteLocalizationText">Are you sure you want to delete **%1$s** language pack?</string>
     <string name="IncorrectLocalization">Incorrect localization file</string>
@@ -2168,16 +2161,12 @@
     <string name="ClearCacheInfo">Free up disk space on your device; your media will stay in the cloud.</string>
     <string name="ChangePhoneNumber">Change Phone Number</string>
     <string name="ChangePhoneNumberInfo">Move your account, chats and media to a new number.</string>
-    <string name="ContactSupport">Contact Support</string>
-    <string name="ContactSupportInfo">Tell us about any issues; logging out doesn\'t usually help.</string>
     <string name="LogOutTitle">Log Out</string>
     <string name="LogOutInfo">Logging out deactivates all Secret Chats.</string>
-    <string name="SearchInSettings">Search Settings and FAQ</string>
+    <string name="SearchInSettings">Search Settings</string>
     <string name="SettingsRecent">Recent searches</string>
-    <string name="SettingsFaqSearchTitle">Frequently asked questions</string>
     <string name="SettingsNoResults">No results found</string>
     <string name="SettingsNoRecent">No recent searches</string>
-    <string name="SettingsSearchFaq">FAQ</string>
     <string name="DistanceUnits">Distance Units</string>
     <string name="DistanceUnitsTitle">Distance units</string>
     <string name="DistanceUnitsAutomatic">Automatic</string>

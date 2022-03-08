@@ -24,48 +24,24 @@ import android.util.Base64;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 import android.util.SparseIntArray;
-
 import androidx.collection.LongSparseArray;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.util.Consumer;
-
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteException;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.support.LongSparseIntArray;
 import org.telegram.messenger.support.LongSparseLongArray;
 import org.telegram.messenger.voip.VoIPService;
-import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.NativeByteBuffer;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.SerializedData;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.*;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.ChatActivity;
-import org.telegram.ui.Components.AlertsCreator;
-import org.telegram.ui.Components.BulletinFactory;
-import org.telegram.ui.Components.JoinCallAlert;
-import org.telegram.ui.Components.MotionBackgroundDrawable;
-import org.telegram.ui.Components.SwipeGestureSettingsView;
-import org.telegram.ui.DialogsActivity;
-import org.telegram.ui.EditWidgetActivity;
-import org.telegram.ui.LaunchActivity;
-import org.telegram.ui.ProfileActivity;
+import org.telegram.ui.*;
+import org.telegram.ui.Components.*;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
@@ -224,9 +200,6 @@ public class MessagesController extends BaseController implements NotificationCe
     private TLRPC.TL_messages_peerDialogs resetDialogsPinned;
     private TLRPC.messages_Dialogs resetDialogsAll;
     private SparseIntArray loadingPinnedDialogs = new SparseIntArray();
-
-    public ArrayList<FaqSearchResult> faqSearchArray = new ArrayList<>();
-    public TLRPC.WebPage faqWebPage;
 
     private int loadingNotificationSettings;
     private boolean loadingNotificationSignUpSettings;
@@ -388,45 +361,6 @@ public class MessagesController extends BaseController implements NotificationCe
         private TLRPC.TL_channels_sendAsPeers sendAsPeers;
         private long loadTime;
         private boolean loading;
-    }
-
-    public static class FaqSearchResult {
-
-        public String title;
-        public String[] path;
-        public String url;
-        public int num;
-
-        public FaqSearchResult(String t, String[] p, String u) {
-            title = t;
-            path = p;
-            url = u;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (!(obj instanceof FaqSearchResult)) {
-                return false;
-            }
-            FaqSearchResult result = (FaqSearchResult) obj;
-            return title.equals(result.title);
-        }
-
-        @Override
-        public String toString() {
-            SerializedData data = new SerializedData();
-            data.writeInt32(num);
-            data.writeInt32(0);
-            data.writeString(title);
-            data.writeInt32(path != null ? path.length : 0);
-            if (path != null) {
-                for (int a = 0; a < path.length; a++) {
-                    data.writeString(path[a]);
-                }
-            }
-            data.writeString(url);
-            return Utilities.bytesToHex(data.toByteArray());
-        }
     }
 
     public static class EmojiSound {

@@ -59,7 +59,6 @@ import androidx.viewpager.widget.ViewPager;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.*;
-import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLObject;
@@ -82,8 +81,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private LinearLayoutManager layoutManager;
     private ListAdapter listAdapter;
     private SearchAdapter searchAdapter;
-    private SimpleTextView[] nameTextView = new SimpleTextView[2];
-    private SimpleTextView[] onlineTextView = new SimpleTextView[2];
+    private final SimpleTextView[] nameTextView = new SimpleTextView[2];
+    private final SimpleTextView[] onlineTextView = new SimpleTextView[2];
     private AudioPlayerAlert.ClippingTextViewSwitcher mediaCounterTextView;
     private RLottieImageView writeButton;
     private AnimatorSet writeButtonAnimation;
@@ -105,7 +104,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private FrameLayout avatarContainer;
     private FrameLayout avatarContainer2;
     private AvatarImageView avatarImage;
-    private View avatarOverlay;
     private AnimatorSet avatarAnimation;
     private RadialProgressView avatarProgressView;
     private ImageView timeItem;
@@ -117,15 +115,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private int avatarColor;
 
     private View scrimView = null;
-    private Paint scrimPaint = new Paint(Paint.ANTI_ALIAS_FLAG) {
+    private final Paint scrimPaint = new Paint(Paint.ANTI_ALIAS_FLAG) {
         @Override
         public void setAlpha(int a) {
             super.setAlpha(a);
             fragmentView.invalidate();
         }
     };
-    private Paint actionBarBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private ActionBarPopupWindow scrimPopupWindow;
+    private final Paint actionBarBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     private int overlayCountVisible;
 
@@ -138,7 +135,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     private boolean doNotSetForeground;
 
-    private boolean[] isOnline = new boolean[1];
+    private final boolean[] isOnline = new boolean[1];
 
     private boolean callItemVisible;
     private boolean videoCallItemVisible;
@@ -186,7 +183,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private Animator searchViewTransition;
     private boolean searchMode;
 
-    private HashMap<Integer, Integer> positionToOffset = new HashMap<>();
+    private final HashMap<Integer, Integer> positionToOffset = new HashMap<>();
 
     private float avatarX;
     private float avatarY;
@@ -199,12 +196,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private float listViewVelocityY;
     private ValueAnimator expandAnimator;
     private float currentExpanAnimatorFracture;
-    private float[] expandAnimatorValues = new float[]{0f, 1f};
+    private final float[] expandAnimatorValues = new float[]{0f, 1f};
     private boolean isInLandscapeMode;
     private boolean allowPullingDown;
     private boolean isPulledDown;
 
-    private Paint whitePaint = new Paint();
+    private final Paint whitePaint = new Paint();
 
     private boolean isBot;
 
@@ -253,7 +250,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private final static int delete_avatar = 35;
     private final static int add_photo = 36;
 
-    private Rect rect = new Rect();
+    private final Rect rect = new Rect();
 
     private int rowCount;
 
@@ -277,11 +274,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private int filtersRow;
     private int devicesRow;
     private int devicesSectionRow;
-    private int helpHeaderRow;
-    private int questionRow;
-    private int faqRow;
-    private int policyRow;
-    private int helpSectionCell;
     private int debugHeaderRow;
     private int sendLogsRow;
     private int sendLastLogsRow;
@@ -349,7 +341,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
     };
 
-    private PhotoViewer.PhotoViewerProvider provider = new PhotoViewer.EmptyPhotoViewerProvider() {
+    private final PhotoViewer.PhotoViewerProvider provider = new PhotoViewer.EmptyPhotoViewerProvider() {
 
         @Override
         public PhotoViewer.PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, TLRPC.FileLocation fileLocation, int index, boolean needPreview) {
@@ -375,7 +367,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 avatarImage.getLocationInWindow(coords);
                 PhotoViewer.PlaceProviderObject object = new PhotoViewer.PlaceProviderObject();
                 object.viewX = coords[0];
-                object.viewY = coords[1] - (Build.VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight);
+                object.viewY = coords[1];
                 object.parentView = avatarImage;
                 object.imageReceiver = avatarImage.getImageReceiver();
                 if (userId != 0) {
@@ -410,7 +402,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         private final RectF rect = new RectF();
         private final Paint placeholderPaint;
 
-        private ImageReceiver foregroundImageReceiver;
+        private final ImageReceiver foregroundImageReceiver;
         private float foregroundAlpha;
         private ImageReceiver.BitmapHolder drawableHolder;
 
@@ -2148,12 +2140,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 presentFragment(new FiltersSetupActivity());
             } else if (position == devicesRow) {
                 presentFragment(new SessionsActivity(0));
-            } else if (position == questionRow) {
-                showDialog(AlertsCreator.createSupportAlert(ProfileActivity.this));
-            } else if (position == faqRow) {
-                Browser.openUrl(getParentActivity(), LocaleController.getString("TelegramFaqUrl", R.string.TelegramFaqUrl));
-            } else if (position == policyRow) {
-                Browser.openUrl(getParentActivity(), LocaleController.getString("PrivacyPolicyUrl", R.string.PrivacyPolicyUrl));
             } else if (position == sendLogsRow) {
                 sendLogs(false);
             } else if (position == sendLastLogsRow) {
@@ -2338,11 +2324,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (searchAdapter.searchWas) {
                     if (position < searchAdapter.searchResults.size()) {
                         object = searchAdapter.searchResults.get(position);
-                    } else {
-                        position -= searchAdapter.searchResults.size() + 1;
-                        if (position >= 0 && position < searchAdapter.faqSearchResults.size()) {
-                            object = searchAdapter.faqSearchResults.get(position);
-                        }
                     }
                 } else {
                     if (!searchAdapter.recentSearches.isEmpty()) {
@@ -2350,20 +2331,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     }
                     if (position >= 0 && position < searchAdapter.recentSearches.size()) {
                         object = searchAdapter.recentSearches.get(position);
-                    } else {
-                        position -= searchAdapter.recentSearches.size() + 1;
-                        if (position >= 0 && position < searchAdapter.faqSearchArray.size()) {
-                            object = searchAdapter.faqSearchArray.get(position);
-                            add = false;
-                        }
                     }
                 }
                 if (object instanceof SearchAdapter.SearchResult) {
                     SearchAdapter.SearchResult result = (SearchAdapter.SearchResult) object;
                     result.open();
-                } else if (object instanceof MessagesController.FaqSearchResult) {
-                    MessagesController.FaqSearchResult result = (MessagesController.FaqSearchResult) object;
-                    NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.openArticle, searchAdapter.faqWebPage, result.url);
                 }
                 if (add && object != null) {
                     searchAdapter.addRecent(object);
@@ -2396,8 +2368,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             emptyView.subtitle.setVisibility(View.GONE);
             emptyView.setVisibility(View.GONE);
             frameLayout.addView(emptyView);
-
-            searchAdapter.loadFaqWebPage();
         }
 
         if (banFromGroup != 0) {
@@ -5414,11 +5384,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         filtersRow = -1;
         devicesRow = -1;
         devicesSectionRow = -1;
-        helpHeaderRow = -1;
-        questionRow = -1;
-        faqRow = -1;
-        policyRow = -1;
-        helpSectionCell = -1;
         debugHeaderRow = -1;
         sendLogsRow = -1;
         sendLastLogsRow = -1;
@@ -5510,12 +5475,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 devicesRow = rowCount++;
                 languageRow = rowCount++;
                 devicesSectionRow = rowCount++;
-                helpHeaderRow = rowCount++;
-                questionRow = rowCount++;
-                faqRow = rowCount++;
-                policyRow = rowCount++;
                 if (BuildVars.LOGS_ENABLED || BuildVars.DEBUG_PRIVATE_VERSION) {
-                    helpSectionCell = rowCount++;
                     debugHeaderRow = rowCount++;
                 }
                 if (BuildVars.LOGS_ENABLED) {
@@ -6942,8 +6902,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         headerCell.setText(LocaleController.getString("SETTINGS", R.string.SETTINGS));
                     } else if (position == numberSectionRow) {
                         headerCell.setText(LocaleController.getString("Account", R.string.Account));
-                    } else if (position == helpHeaderRow) {
-                        headerCell.setText(LocaleController.getString("SettingsHelp", R.string.SettingsHelp));
                     } else if (position == debugHeaderRow) {
                         headerCell.setText(LocaleController.getString("SettingsDebug", R.string.SettingsDebug));
                     }
@@ -7107,12 +7065,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         textCell.setTextAndIcon(LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.menu_chats, true);
                     } else if (position == filtersRow) {
                         textCell.setTextAndIcon(LocaleController.getString("Filters", R.string.Filters), R.drawable.menu_folders, true);
-                    } else if (position == questionRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("AskAQuestion", R.string.AskAQuestion), R.drawable.menu_support2, true);
-                    } else if (position == faqRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("TelegramFAQ", R.string.TelegramFAQ), R.drawable.menu_help, true);
-                    } else if (position == policyRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("PrivacyPolicy", R.string.PrivacyPolicy), R.drawable.menu_policy, false);
                     } else if (position == sendLogsRow) {
                         textCell.setText(LocaleController.getString("DebugSendLogs", R.string.DebugSendLogs), true);
                     } else if (position == sendLastLogsRow) {
@@ -7255,8 +7207,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 return position == notificationRow || position == numberRow || position == privacyRow ||
                         position == languageRow || position == setUsernameRow || position == bioRow ||
                         position == versionRow || position == dataRow || position == chatRow ||
-                        position == questionRow || position == devicesRow || position == filtersRow ||
-                        position == faqRow || position == policyRow || position == sendLogsRow || position == sendLastLogsRow ||
+                        position == devicesRow || position == filtersRow ||
+                        position == sendLogsRow || position == sendLastLogsRow ||
                         position == clearLogsRow || position == switchBackendRow || position == setAvatarRow;
             }
             if (holder.itemView instanceof UserCell) {
@@ -7281,7 +7233,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         @Override
         public int getItemViewType(int position) {
             if (position == infoHeaderRow || position == membersHeaderRow || position == settingsSectionRow2 ||
-                    position == numberSectionRow || position == helpHeaderRow || position == debugHeaderRow) {
+                    position == numberSectionRow || position == debugHeaderRow) {
                 return 1;
             } else if (position == phoneRow || position == usernameRow || position == locationRow ||
                     position == numberRow || position == setUsernameRow || position == bioRow) {
@@ -7293,8 +7245,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     position == addMemberRow || position == joinRow || position == unblockRow ||
                     position == sendMessageRow || position == notificationRow || position == privacyRow ||
                     position == languageRow || position == dataRow || position == chatRow ||
-                    position == questionRow || position == devicesRow || position == filtersRow ||
-                    position == faqRow || position == policyRow || position == sendLogsRow || position == sendLastLogsRow ||
+                    position == devicesRow || position == filtersRow ||
+                    position == sendLogsRow || position == sendLastLogsRow ||
                     position == clearLogsRow || position == switchBackendRow || position == setAvatarRow) {
                 return 4;
             } else if (position == notificationsDividerRow) {
@@ -7303,7 +7255,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 return 6;
             } else if (position == infoSectionRow || position == lastSectionRow || position == membersSectionRow ||
                     position == secretSettingsSectionRow || position == settingsSectionRow || position == devicesSectionRow ||
-                    position == helpSectionCell || position == setAvatarSectionRow || position == passwordSuggestionSectionRow ||
+                    position == setAvatarSectionRow || position == passwordSuggestionSectionRow ||
                     position == phoneSuggestionSectionRow) {
                 return 7;
             } else if (position >= membersStartRow && position < membersEndRow) {
@@ -7485,33 +7437,25 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 new SearchResult(317, LocaleController.getString("ArchivedMasks", R.string.ArchivedMasks), null, LocaleController.getString("ChatSettings", R.string.ChatSettings), LocaleController.getString("StickersAndMasks", R.string.StickersAndMasks), R.drawable.menu_chats, () -> presentFragment(new ArchivedStickersActivity(MediaDataController.TYPE_MASK))),
 
                 new SearchResult(400, LocaleController.getString("Language", R.string.Language), R.drawable.menu_language, () -> presentFragment(new LanguageSelectActivity())),
-
-                new SearchResult(402, LocaleController.getString("AskAQuestion", R.string.AskAQuestion), LocaleController.getString("SettingsHelp", R.string.SettingsHelp), R.drawable.menu_help, () -> showDialog(AlertsCreator.createSupportAlert(ProfileActivity.this))),
-                new SearchResult(403, LocaleController.getString("TelegramFAQ", R.string.TelegramFAQ), LocaleController.getString("SettingsHelp", R.string.SettingsHelp), R.drawable.menu_help, () -> Browser.openUrl(getParentActivity(), LocaleController.getString("TelegramFaqUrl", R.string.TelegramFaqUrl))),
-                new SearchResult(404, LocaleController.getString("PrivacyPolicy", R.string.PrivacyPolicy), LocaleController.getString("SettingsHelp", R.string.SettingsHelp), R.drawable.menu_help, () -> Browser.openUrl(getParentActivity(), LocaleController.getString("PrivacyPolicyUrl", R.string.PrivacyPolicyUrl))),
         };
-        private ArrayList<MessagesController.FaqSearchResult> faqSearchArray = new ArrayList<>();
 
         private Context mContext;
         private ArrayList<CharSequence> resultNames = new ArrayList<>();
         private ArrayList<SearchResult> searchResults = new ArrayList<>();
-        private ArrayList<MessagesController.FaqSearchResult> faqSearchResults = new ArrayList<>();
         private ArrayList<Object> recentSearches = new ArrayList<>();
         private boolean searchWas;
         private Runnable searchRunnable;
         private String lastSearchString;
-        private TLRPC.WebPage faqWebPage;
-        private boolean loadingFaqPage;
 
         public SearchAdapter(Context context) {
             mContext = context;
 
             HashMap<Integer, SearchResult> resultHashMap = new HashMap<>();
-            for (int a = 0; a < searchArray.length; a++) {
-                if (searchArray[a] == null) {
+            for (SearchResult searchResult : searchArray) {
+                if (searchResult == null) {
                     continue;
                 }
-                resultHashMap.put(searchArray[a].guid, searchArray[a]);
+                resultHashMap.put(searchResult.guid, searchResult);
             }
             Set<String> set = MessagesController.getGlobalMainSettings().getStringSet("settingsSearchRecent2", null);
             if (set != null) {
@@ -7520,21 +7464,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         SerializedData data = new SerializedData(Utilities.hexToBytes(value));
                         int num = data.readInt32(false);
                         int type = data.readInt32(false);
-                        if (type == 0) {
-                            String title = data.readString(false);
-                            int count = data.readInt32(false);
-                            String[] path = null;
-                            if (count > 0) {
-                                path = new String[count];
-                                for (int a = 0; a < count; a++) {
-                                    path[a] = data.readString(false);
-                                }
-                            }
-                            String url = data.readString(false);
-                            MessagesController.FaqSearchResult result = new MessagesController.FaqSearchResult(title, path, url);
-                            result.num = num;
-                            recentSearches.add(result);
-                        } else if (type == 1) {
+                        if (type == 1) {
                             SearchResult result = resultHashMap.get(data.readInt32(false));
                             if (result != null) {
                                 result.num = num;
@@ -7558,78 +7488,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             });
         }
 
-        private void loadFaqWebPage() {
-            faqWebPage = getMessagesController().faqWebPage;
-            if (faqWebPage != null) {
-                faqSearchArray.addAll(getMessagesController().faqSearchArray);
-            }
-            if (faqWebPage != null || loadingFaqPage) {
-                return;
-            }
-            loadingFaqPage = true;
-            final TLRPC.TL_messages_getWebPage req2 = new TLRPC.TL_messages_getWebPage();
-            req2.url = LocaleController.getString("TelegramFaqUrl", R.string.TelegramFaqUrl);
-            req2.hash = 0;
-            getConnectionsManager().sendRequest(req2, (response2, error2) -> {
-                if (response2 instanceof TLRPC.WebPage) {
-                    ArrayList<MessagesController.FaqSearchResult> arrayList = new ArrayList<>();
-                    TLRPC.WebPage page = (TLRPC.WebPage) response2;
-                    if (page.cached_page != null) {
-                        for (int a = 0, N = page.cached_page.blocks.size(); a < N; a++) {
-                            TLRPC.PageBlock block = page.cached_page.blocks.get(a);
-                            if (block instanceof TLRPC.TL_pageBlockList) {
-                                String paragraph = null;
-                                if (a != 0) {
-                                    TLRPC.PageBlock prevBlock = page.cached_page.blocks.get(a - 1);
-                                    if (prevBlock instanceof TLRPC.TL_pageBlockParagraph) {
-                                        TLRPC.TL_pageBlockParagraph pageBlockParagraph = (TLRPC.TL_pageBlockParagraph) prevBlock;
-                                        paragraph = ArticleViewer.getPlainText(pageBlockParagraph.text).toString();
-                                    }
-                                }
-                                TLRPC.TL_pageBlockList list = (TLRPC.TL_pageBlockList) block;
-                                for (int b = 0, N2 = list.items.size(); b < N2; b++) {
-                                    TLRPC.PageListItem item = list.items.get(b);
-                                    if (item instanceof TLRPC.TL_pageListItemText) {
-                                        TLRPC.TL_pageListItemText itemText = (TLRPC.TL_pageListItemText) item;
-                                        String url = ArticleViewer.getUrl(itemText.text);
-                                        String text = ArticleViewer.getPlainText(itemText.text).toString();
-                                        if (TextUtils.isEmpty(url) || TextUtils.isEmpty(text)) {
-                                            continue;
-                                        }
-                                        String[] path;
-                                        if (paragraph != null) {
-                                            path = new String[]{LocaleController.getString("SettingsSearchFaq", R.string.SettingsSearchFaq), paragraph};
-                                        } else {
-                                            path = new String[]{LocaleController.getString("SettingsSearchFaq", R.string.SettingsSearchFaq)};
-                                        }
-                                        arrayList.add(new MessagesController.FaqSearchResult(text, path, url));
-                                    }
-                                }
-                            } else if (block instanceof TLRPC.TL_pageBlockAnchor) {
-                                break;
-                            }
-                        }
-                        faqWebPage = page;
-                    }
-                    AndroidUtilities.runOnUIThread(() -> {
-                        faqSearchArray.addAll(arrayList);
-                        getMessagesController().faqSearchArray = arrayList;
-                        getMessagesController().faqWebPage = faqWebPage;
-                        if (!searchWas) {
-                            notifyDataSetChanged();
-                        }
-                    });
-                }
-                loadingFaqPage = false;
-            });
-        }
-
         @Override
         public int getItemCount() {
             if (searchWas) {
-                return searchResults.size() + (faqSearchResults.isEmpty() ? 0 : 1 + faqSearchResults.size());
+                return searchResults.size();
             }
-            return (recentSearches.isEmpty() ? 0 : recentSearches.size() + 1) + (faqSearchArray.isEmpty() ? 0 : faqSearchArray.size() + 1);
+            return (recentSearches.isEmpty() ? 0 : recentSearches.size() + 1);
         }
 
         @Override
@@ -7653,10 +7517,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 icon = result.iconResId;
                             }
                             searchCell.setTextAndValueAndIcon(resultNames.get(position), result.path, icon, position < searchResults.size() - 1);
-                        } else {
-                            position -= searchResults.size() + 1;
-                            MessagesController.FaqSearchResult result = faqSearchResults.get(position);
-                            searchCell.setTextAndValue(resultNames.get(position + searchResults.size()), result.path, true, position < searchResults.size() - 1);
                         }
                     } else {
                         if (!recentSearches.isEmpty()) {
@@ -7667,21 +7527,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             if (object instanceof SearchResult) {
                                 SearchResult result = (SearchResult) object;
                                 searchCell.setTextAndValue(result.searchTitle, result.path, false, position < recentSearches.size() - 1);
-                            } else if (object instanceof MessagesController.FaqSearchResult) {
-                                MessagesController.FaqSearchResult result = (MessagesController.FaqSearchResult) object;
-                                searchCell.setTextAndValue(result.title, result.path, true, position < recentSearches.size() - 1);
                             }
-                        } else {
-                            position -= recentSearches.size() + 1;
-                            MessagesController.FaqSearchResult result = faqSearchArray.get(position);
-                            searchCell.setTextAndValue(result.title, result.path, true, position < recentSearches.size() - 1);
                         }
                     }
                     break;
                 }
                 case 1: {
-                    GraySectionCell sectionCell = (GraySectionCell) holder.itemView;
-                    sectionCell.setText(LocaleController.getString("SettingsFaqSearchTitle", R.string.SettingsFaqSearchTitle));
                     break;
                 }
                 case 2: {
@@ -7750,8 +7601,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 Object o = recentSearches.get(a);
                 if (o instanceof SearchResult) {
                     ((SearchResult) o).num = a;
-                } else if (o instanceof MessagesController.FaqSearchResult) {
-                    ((MessagesController.FaqSearchResult) o).num = a;
                 }
                 toSave.add(o.toString());
             }
@@ -7767,8 +7616,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         private int getNum(Object o) {
             if (o instanceof SearchResult) {
                 return ((SearchResult) o).num;
-            } else if (o instanceof MessagesController.FaqSearchResult) {
-                return ((MessagesController.FaqSearchResult) o).num;
             }
             return 0;
         }
@@ -7782,7 +7629,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (TextUtils.isEmpty(text)) {
                 searchWas = false;
                 searchResults.clear();
-                faqSearchResults.clear();
                 resultNames.clear();
                 emptyView.stickerView.getImageReceiver().startAnimation();
                 emptyView.title.setText(LocaleController.getString("SettingsNoRecent", R.string.SettingsNoRecent));
@@ -7791,7 +7637,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
             Utilities.searchQueue.postRunnable(searchRunnable = () -> {
                 ArrayList<SearchResult> results = new ArrayList<>();
-                ArrayList<MessagesController.FaqSearchResult> faqResults = new ArrayList<>();
                 ArrayList<CharSequence> names = new ArrayList<>();
                 String[] searchArgs = text.split(" ");
                 String[] translitArgs = new String[searchArgs.length];
@@ -7844,35 +7689,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         }
                     }
                 }
-                if (faqWebPage != null) {
-                    for (int a = 0, N = faqSearchArray.size(); a < N; a++) {
-                        MessagesController.FaqSearchResult result = faqSearchArray.get(a);
-                        String title = " " + result.title.toLowerCase();
-                        SpannableStringBuilder stringBuilder = null;
-                        for (int i = 0; i < searchArgs.length; i++) {
-                            if (searchArgs[i].length() != 0) {
-                                String searchString = searchArgs[i];
-                                int index = title.indexOf(" " + searchString);
-                                if (index < 0 && translitArgs[i] != null) {
-                                    searchString = translitArgs[i];
-                                    index = title.indexOf(" " + searchString);
-                                }
-                                if (index >= 0) {
-                                    if (stringBuilder == null) {
-                                        stringBuilder = new SpannableStringBuilder(result.title);
-                                    }
-                                    stringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), index, index + searchString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                                } else {
-                                    break;
-                                }
-                            }
-                            if (stringBuilder != null && i == searchArgs.length - 1) {
-                                faqResults.add(result);
-                                names.add(stringBuilder);
-                            }
-                        }
-                    }
-                }
 
                 AndroidUtilities.runOnUIThread(() -> {
                     if (!text.equals(lastSearchString)) {
@@ -7884,7 +7700,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     }
                     searchWas = true;
                     searchResults = results;
-                    faqSearchResults = faqResults;
                     resultNames = names;
                     notifyDataSetChanged();
                     emptyView.stickerView.getImageReceiver().startAnimation();
@@ -7897,11 +7712,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
     }
 
-
-    private void dimBehindView(View view, boolean enable) {
-        scrimView = view;
-        dimBehindView(enable);
-    }
     private void dimBehindView(View view, float value) {
         scrimView = view;
         dimBehindView(value);
@@ -8250,11 +8060,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             put(++pointer, filtersRow, sparseIntArray);
             put(++pointer, devicesRow, sparseIntArray);
             put(++pointer, devicesSectionRow, sparseIntArray);
-            put(++pointer, helpHeaderRow, sparseIntArray);
-            put(++pointer, questionRow, sparseIntArray);
-            put(++pointer, faqRow, sparseIntArray);
-            put(++pointer, policyRow, sparseIntArray);
-            put(++pointer, helpSectionCell, sparseIntArray);
             put(++pointer, debugHeaderRow, sparseIntArray);
             put(++pointer, sendLogsRow, sparseIntArray);
             put(++pointer, sendLastLogsRow, sparseIntArray);

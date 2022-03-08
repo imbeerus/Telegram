@@ -8,7 +8,6 @@
 
 package org.telegram.ui;
 
-import android.animation.AnimatorSet;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,45 +16,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.DownloadController;
-import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
-import org.telegram.messenger.SharedConfig;
-import org.telegram.messenger.UserConfig;
-import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.ActionBar.ThemeDescription;
-import org.telegram.ui.Cells.HeaderCell;
-import org.telegram.ui.Cells.ShadowSectionCell;
-import org.telegram.ui.Cells.TextDetailSettingsCell;
-import org.telegram.ui.Cells.TextInfoPrivacyCell;
-import org.telegram.ui.Cells.TextSettingsCell;
-import org.telegram.ui.Components.AlertsCreator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import org.telegram.messenger.*;
+import org.telegram.ui.ActionBar.*;
+import org.telegram.ui.Cells.*;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 public class LogoutActivity extends BaseFragment {
 
     private ListAdapter listAdapter;
     private RecyclerListView listView;
-    private AnimatorSet animatorSet;
 
     private int alternativeHeaderRow;
     private int addAccountRow;
     private int passcodeRow;
     private int cacheRow;
     private int phoneRow;
-    private int supportRow;
     private int alternativeSectionRow;
     private int logoutRow;
     private int logoutSectionRow;
@@ -79,7 +59,6 @@ public class LogoutActivity extends BaseFragment {
         }
         cacheRow = rowCount++;
         phoneRow = rowCount++;
-        supportRow = rowCount++;
         alternativeSectionRow = rowCount++;
         logoutRow = rowCount++;
         logoutSectionRow = rowCount++;
@@ -133,14 +112,11 @@ public class LogoutActivity extends BaseFragment {
                 presentFragment(new CacheControlActivity());
             } else if (position == phoneRow) {
                 presentFragment(new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_CHANGE_PHONE_NUMBER));
-            } else if (position == supportRow) {
-                showDialog(AlertsCreator.createSupportAlert(LogoutActivity.this));
             } else if (position == logoutRow) {
                 if (getParentActivity() == null) {
                     return;
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                UserConfig userConfig = getUserConfig();
                 builder.setMessage(LocaleController.getString("AreYouSureLogout", R.string.AreYouSureLogout));
                 builder.setTitle(LocaleController.getString("LogOut", R.string.LogOut));
                 builder.setPositiveButton(LocaleController.getString("LogOut", R.string.LogOut), (dialogInterface, i) -> MessagesController.getInstance(currentAccount).performLogout(1));
@@ -203,8 +179,6 @@ public class LogoutActivity extends BaseFragment {
                         view.setTextAndValueAndIcon(LocaleController.getString("ClearCache", R.string.ClearCache), LocaleController.getString("ClearCacheInfo", R.string.ClearCacheInfo), R.drawable.menu_clearcache, true);
                     } else if (position == phoneRow) {
                         view.setTextAndValueAndIcon(LocaleController.getString("ChangePhoneNumber", R.string.ChangePhoneNumber), LocaleController.getString("ChangePhoneNumberInfo", R.string.ChangePhoneNumberInfo), R.drawable.menu_newphone, true);
-                    } else if (position == supportRow) {
-                        view.setTextAndValueAndIcon(LocaleController.getString("ContactSupport", R.string.ContactSupport), LocaleController.getString("ContactSupportInfo", R.string.ContactSupportInfo), R.drawable.menu_support, false);
                     }
                     break;
                 }
@@ -229,7 +203,7 @@ public class LogoutActivity extends BaseFragment {
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int position = holder.getAdapterPosition();
-            return position == addAccountRow || position == passcodeRow || position == cacheRow || position == phoneRow || position == supportRow || position == logoutRow;
+            return position == addAccountRow || position == passcodeRow || position == cacheRow || position == phoneRow || position == logoutRow;
         }
 
         @Override
@@ -272,7 +246,7 @@ public class LogoutActivity extends BaseFragment {
         public int getItemViewType(int position) {
             if (position == alternativeHeaderRow) {
                 return 0;
-            } else if (position == addAccountRow || position == passcodeRow || position == cacheRow || position == phoneRow || position == supportRow) {
+            } else if (position == addAccountRow || position == passcodeRow || position == cacheRow || position == phoneRow) {
                 return 1;
             } else if (position == alternativeSectionRow) {
                 return 2;
