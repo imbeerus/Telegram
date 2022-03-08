@@ -2818,7 +2818,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 			builder.setSmallIcon(isMicMute() ? R.drawable.voicechat_muted : R.drawable.voicechat_active);
 		} else {
 			builder.setContentTitle(LocaleController.getString("VoipOutgoingCall", R.string.VoipOutgoingCall));
-			builder.setSmallIcon(R.drawable.notification);
+			builder.setSmallIcon(R.drawable.ic_launcher);
 		}
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 			Intent endIntent = new Intent(this, VoIPActionsReceiver.class);
@@ -3424,7 +3424,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 			if (groupCall != null) {
 				bldr.setSmallIcon(isMicMute() ? R.drawable.voicechat_muted : R.drawable.voicechat_active);
 			} else {
-				bldr.setSmallIcon(R.drawable.notification);
+				bldr.setSmallIcon(R.drawable.ic_launcher);
 			}
 			startForeground(ID_ONGOING_CALL_NOTIFICATION, bldr.build());
 		}
@@ -3812,7 +3812,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 		Notification.Builder builder = new Notification.Builder(this)
 				.setContentTitle(video ? LocaleController.getString("VoipInVideoCallBranding", R.string.VoipInVideoCallBranding) : LocaleController.getString("VoipInCallBranding", R.string.VoipInCallBranding))
 				.setContentText(name)
-				.setSmallIcon(R.drawable.notification)
+				.setSmallIcon(R.drawable.ic_launcher)
 				.setSubText(subText)
 				.setContentIntent(PendingIntent.getActivity(this, 0, intent, 0));
 		Uri soundProviderUri = Uri.parse("content://" + BuildConfig.APPLICATION_ID + ".call_sound_provider/start_ringing");
@@ -3899,9 +3899,8 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 		}
 		Notification incomingNotification = builder.getNotification();
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			RemoteViews customView = new RemoteViews(getPackageName(), LocaleController.isRTL ? R.layout.call_notification_rtl : R.layout.call_notification);
+			RemoteViews customView = new RemoteViews(getPackageName(), R.layout.call_notification);
 			customView.setTextViewText(R.id.name, name);
-			boolean subtitleVisible = true;
 			if (TextUtils.isEmpty(subText)) {
 				customView.setViewVisibility(R.id.subtitle, View.GONE);
 				if (UserConfig.getActivatedAccountsCount() > 1) {
@@ -4238,7 +4237,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 		PhoneAccountHandle handle = new PhoneAccountHandle(new ComponentName(this, TelegramConnectionService.class), "" + self.id);
 		PhoneAccount account = new PhoneAccount.Builder(handle, ContactsController.formatName(self.first_name, self.last_name))
 				.setCapabilities(PhoneAccount.CAPABILITY_SELF_MANAGED)
-				.setIcon(Icon.createWithResource(this, R.drawable.ic_launcher_dr))
+				.setIcon(Icon.createWithResource(this, R.drawable.ic_launcher))
 				.setHighlightColor(0xff2ca5e0)
 				.addSupportedUriScheme("sip")
 				.build();

@@ -412,7 +412,6 @@ add_library(${NATIVE_LIB} SHARED
         audio.c
         image.cpp
         video.c
-        intro/IntroRenderer.c
         SqliteWrapper.cpp
         utilities.cpp
         gifvideo.cpp
