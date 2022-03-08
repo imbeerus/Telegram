@@ -125,7 +125,7 @@ android {
             zipAlignEnabled true
             signingConfig signingConfigs.release
             minifyEnabled true
-            shrinkResources false
+            shrinkResources true
             multiDexEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), getDefaultProguardFile("proguard-android-optimize.txt"), 'proguard-rules.pro'
             ndk.debugSymbolLevel = 'NONE'
